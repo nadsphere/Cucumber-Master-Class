@@ -16,12 +16,19 @@ public class TestBase {
         FileInputStream fis = new FileInputStream("src/test/resources/global.properties");
         Properties prop = new Properties();
         prop.load(fis);
-
         String baseUrl = prop.getProperty("linkUrl");
+        String browserProps = prop.getProperty("browser");
+        String browserMaven = System.getProperty("browser");
+
+        // define in cli mode
+        //browserMaven: choose browser that you want to run in cli
+        //browserProps: default browser from global.properties
+        String browser = browserMaven != null ? browserMaven : browserProps;
+
         if (driver == null) {
-            if(prop.getProperty("browser").equalsIgnoreCase("Chrome")){
+            if(browser.equalsIgnoreCase("Chrome")){
                 driver = new ChromeDriver();
-            } else if (prop.getProperty("browser").equalsIgnoreCase("Edge")) {
+            } else if (browser.equalsIgnoreCase("Edge")) {
                 driver = new EdgeDriver();
             }
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));

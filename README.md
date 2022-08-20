@@ -22,7 +22,7 @@ Run without tags and brwoser only (it will execute all features files)
 ```
 mvn clean test -Dbrowser=Chrome
 ```  
- ________________
+________________
  
 **Way 3:**
 Run the ```TestNGRunner.java``` file directly

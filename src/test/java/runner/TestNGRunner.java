@@ -6,7 +6,7 @@ import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
         features = "classpath:features", monochrome = true,
-        glue = "stepDefinition", tags = "@Debug2",
+        glue = "stepDefinition", tags = "@CheckOut",
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber-rep.html",

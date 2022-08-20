@@ -15,15 +15,15 @@ mvn clean test -D"cucumber.filter.tags=@CheckOut" -Dbrowser=Chrome
 ```
 
 Ps. you can enter any browser configuration in ```TestBase.java``` file if you want (e.g Edge, Firefox, etc)
-______
+<br />
 **Way 2:**
 Run without tags and brwoser only (it will execute all features files)
 ```bash
 mvn clean test -Dbrowser=Chrome
 ```
-______
+<br />
 **Way 3:**
 Run the ```TestNGRunner.java``` file directly
-______
+<br />
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

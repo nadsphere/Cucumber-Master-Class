@@ -31,6 +31,7 @@ public class TestBase {
             } else if (browser.equalsIgnoreCase("Edge")) {
                 driver = new EdgeDriver();
             }
+            assert driver != null;
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
             driver.manage().window().maximize();
             driver.get(baseUrl);

@@ -1,5 +1,5 @@
 Feature: Checkout feature
-  @Debug
+  @CheckOut
   Scenario Outline: Search, add product and checkout
     Given User is on GreenKart landing page
     When User searched with <name> and extract it

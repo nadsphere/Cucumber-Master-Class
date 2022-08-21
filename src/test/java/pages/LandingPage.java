@@ -29,7 +29,6 @@ public class LandingPage {
     public String getTitleLandingPage(){
         return driver.getTitle();
     }
-
     public void addItem(int quantity){
         int i = quantity-1;
         while (i>0){

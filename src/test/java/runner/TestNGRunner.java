@@ -1,12 +1,11 @@
 package runner;
 
-import io.cucumber.testng.AbstractTestNGCucumberTests;
-import io.cucumber.testng.CucumberOptions;
+import io.cucumber.testng.*;
 import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
         features = "classpath:features", monochrome = true,
-        glue = "stepDefinition", tags = "@Debug2",
+        glue = "stepDefinition",
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber-rep.html",

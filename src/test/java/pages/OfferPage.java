@@ -16,10 +16,6 @@ public class OfferPage {
         driver.findElement(searchField).sendKeys(name);
     }
 
-    public void getSearchText(){
-        driver.findElement(searchField).getText();
-    }
-
     public String getProductItem(){
         return driver.findElement(prdItem).getText();
     }

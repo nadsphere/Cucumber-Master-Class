@@ -22,15 +22,6 @@ public class OfferPageStepDef {
         base.gu.switchWindowToChild();
     }
 
-    @Then("User search for {string} shortname in offers page")
-    public void userSearchForShortnameInOffersPage(String shortName) throws Exception{
-        switchToOfferPage();
-
-        op.searchItem(shortName);
-        Thread.sleep(2000);
-        offerProductName = op.getProductItem();
-    }
-
     @And("validate product name in Offers Page matches with Landing Page")
     public void validateProductNameInOffersPageMatchesWithLandingPage() throws Exception{
         Assert.assertEquals(offerProductName, base.landingProductName);

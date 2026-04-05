@@ -1,7 +1,9 @@
 package utils;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 
 import java.io.*;
@@ -12,7 +14,6 @@ public class TestBase {
     public WebDriver driver;
 
     public WebDriver WebDriverManager() throws IOException {
-        // buat ngebaca file global.properties
         FileInputStream fis = new FileInputStream("src/test/resources/global.properties");
         Properties prop = new Properties();
         prop.load(fis);
@@ -20,15 +21,15 @@ public class TestBase {
         String browserProps = prop.getProperty("browser");
         String browserMaven = System.getProperty("browser");
 
-        // define in cli mode
-        //browserMaven: choose browser that you want to run in cli
-        //browserProps: default browser from global.properties
         String browser = browserMaven != null ? browserMaven : browserProps;
 
         if (driver == null) {
             if(browser.equalsIgnoreCase("Chrome")){
-                driver = new ChromeDriver();
+                ChromeOptions options = new ChromeOptions();
+                options.setBrowserVersion("stable");
+                driver = new ChromeDriver(options);
             } else if (browser.equalsIgnoreCase("Edge")) {
+                WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
             }
             assert driver != null;

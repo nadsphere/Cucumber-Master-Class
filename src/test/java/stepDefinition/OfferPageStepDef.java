@@ -25,14 +25,14 @@ public class OfferPageStepDef {
     @And("validate product name in Offers Page matches with Landing Page")
     public void validateProductNameInOffersPageMatchesWithLandingPage() throws Exception{
         Assert.assertEquals(offerProductName, base.landingProductName);
-        Thread.sleep(2000);
     }
 
-    @Then("^User search for (.+) in Offers Page$")
-    public void userSearchForInOffersPage(String proName) throws Exception {
+    @Then("User search for the extracted product name in Offers Page")
+    public void userSearchForTheExtractedProductNameInOffersPage() throws Exception {
         switchToOfferPage();
-        op.searchItem(proName);
-        Thread.sleep(2000);
+        base.gu.waitForPageLoad();
+        op.searchItem(base.landingProductName);
+        op.waitForProductItem();
         offerProductName = op.getProductItem();
     }
 }

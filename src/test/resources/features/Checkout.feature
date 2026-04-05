@@ -9,4 +9,4 @@ Feature: Checkout feature
 
     Examples:
       | name |
-      | Ban  |
+      | Brocolli |

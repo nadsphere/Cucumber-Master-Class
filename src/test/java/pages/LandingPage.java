@@ -1,11 +1,18 @@
 package pages;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class LandingPage {
     public WebDriver driver;
+    private final WebDriverWait wait;
+
     public LandingPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     By search = By.xpath("//input[@type='search']");
@@ -16,6 +23,10 @@ public class LandingPage {
 
     public void searchProduct(String name){
         driver.findElement(search).sendKeys(name);
+    }
+
+    public void waitForProductName() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(prdName));
     }
 
     public String getProductName(){
@@ -29,15 +40,23 @@ public class LandingPage {
     public String getTitleLandingPage(){
         return driver.getTitle();
     }
+
     public void addItem(int quantity){
-        int i = quantity-1;
-        while (i>0){
-            driver.findElement(increBtn).click();
-            i--;
+        for (int i = 1; i < quantity; i++){
+            WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(increBtn));
+            btn.click();
         }
+    }
+
+    public void waitForAddToCartClickable() {
+        wait.until(ExpectedConditions.elementToBeClickable(addCartBtn));
     }
 
     public void clickAddToCart(){
         driver.findElement(addCartBtn).click();
+    }
+
+    public void waitForCartUpdated() {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".pomelo-cart1-badge")));
     }
 }

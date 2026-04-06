@@ -27,3 +27,19 @@ extent-reports/
 
 # Logs
 *.log
+
+# Compiled
+*.class
+
+# Node
+node_modules/
+
+
+# IDE (Eclipse)
+.classpath
+.project
+.settings/
+
+# Sensitive
+*.env
+config-local.properties

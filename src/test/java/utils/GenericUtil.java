@@ -24,7 +24,7 @@ public class GenericUtil {
     }
 
     public void waitForPageLoad() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState == 'complete'"));
+        WebDriverWait pageLoadWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        pageLoadWait.until(ExpectedConditions.jsReturnsValue("return document.readyState == 'complete'"));
     }
 }

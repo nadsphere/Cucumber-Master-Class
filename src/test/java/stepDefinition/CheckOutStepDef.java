@@ -20,7 +20,7 @@ public class CheckOutStepDef {
         Assert.assertEquals(productName, checkoutProductName);
     }
 
-    @And("verify user has ability to enter promo code and place the order")
+    @Then("verify user has ability to enter promo code and place the order")
     public void verifyUserHasAbilityToEnterPromoCodeAndPlaceTheOrder() {
         Assert.assertTrue(checkOutPage.verifyPromoBtn());
         Assert.assertTrue(checkOutPage.verifyPlaceOrder());

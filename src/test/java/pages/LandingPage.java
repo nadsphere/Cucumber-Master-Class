@@ -16,21 +16,28 @@ public class LandingPage {
     }
 
     By search = By.xpath("//input[@type='search']");
-    By prdName = By.className("product-name");
     By topDealsText = By.xpath("//a[@href='#/offers']");
     By increBtn = By.xpath("//a[@class='increment']");
     By addCartBtn = By.xpath("//button[contains(text(),'ADD TO CART')]");
 
     public void searchProduct(String name){
-        driver.findElement(search).sendKeys(name);
+        WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(search));
+        searchField.clear();
+        searchField.sendKeys(name);
     }
 
     public void waitForProductName() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(prdName));
+        wait.until(d -> {
+            Long visible = (Long) ((JavascriptExecutor) d).executeScript(
+                "var els = document.querySelectorAll('h4.product-name');" +
+                "var count = 0; for(var i=0;i<els.length;i++){if(els[i].offsetParent !== null) count++;} return count;"
+            );
+            return visible != null && visible == 1;
+        });
     }
 
     public String getProductName(){
-        return driver.findElement(prdName).getText();
+        return driver.findElement(By.cssSelector("h4.product-name")).getText();
     }
 
     public void selectTopDeals(){

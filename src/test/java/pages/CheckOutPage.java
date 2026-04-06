@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class CheckOutPage {
-    public WebDriver driver;
+    private final WebDriver driver;
     private final WebDriverWait wait;
 
     public CheckOutPage(WebDriver driver) {
@@ -18,13 +18,13 @@ public class CheckOutPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    By cartIcon = By.xpath("//img[@alt='Cart']");
-    By checkoutBtn = By.xpath("//button[contains(text(),'PROCEED TO CHECKOUT')]");
-    By promoBtn = By.cssSelector(".promoBtn");
-    By placeOrderBtn = By.xpath("//button[contains(text(),'Place Order')]");
-    By prodName = By.xpath("//p[@class='product-name']");
+    private By cartIcon = By.xpath("//img[@alt='Cart']");
+    private By checkoutBtn = By.xpath("//button[contains(text(),'PROCEED TO CHECKOUT')]");
+    private By promoBtn = By.cssSelector(".promoBtn");
+    private By placeOrderBtn = By.xpath("//button[contains(text(),'Place Order')]");
+    private By prodName = By.xpath("//p[@class='product-name']");
 
-    public void checkOutItem() throws Exception{
+    public void checkOutItem() {
         wait.until(ExpectedConditions.elementToBeClickable(cartIcon));
         jsClick(cartIcon);
 
@@ -33,7 +33,7 @@ public class CheckOutPage {
     }
 
     private void jsClick(By locator) {
-        WebElement el = driver.findElement(locator);
+        WebElement el = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", el);
     }
 
@@ -41,15 +41,17 @@ public class CheckOutPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(prodName));
     }
 
-    public Boolean verifyPromoBtn(){
-        return driver.findElement(promoBtn).isDisplayed();
+    public void assertPromoButtonIsDisplayed() {
+        WebElement promoButton = wait.until(ExpectedConditions.visibilityOfElementLocated(promoBtn));
+        org.testng.Assert.assertTrue(promoButton.isDisplayed(), "Promo button is not displayed");
     }
 
-    public Boolean verifyPlaceOrder(){
-        return driver.findElement(placeOrderBtn).isDisplayed();
+    public void assertPlaceOrderButtonIsDisplayed() {
+        WebElement placeOrderButton = wait.until(ExpectedConditions.visibilityOfElementLocated(placeOrderBtn));
+        org.testng.Assert.assertTrue(placeOrderButton.isDisplayed(), "Place Order button is not displayed");
     }
 
-    public String getProductTitle(){
-        return driver.findElement(prodName).getText();
+    public String getProductTitle() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(prodName)).getText();
     }
 }

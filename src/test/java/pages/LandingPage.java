@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class LandingPage {
-    public WebDriver driver;
+    private final WebDriver driver;
     private final WebDriverWait wait;
 
     public LandingPage(WebDriver driver) {
@@ -15,12 +15,12 @@ public class LandingPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    By search = By.xpath("//input[@type='search']");
-    By topDealsText = By.xpath("//a[@href='#/offers']");
-    By increBtn = By.xpath("//a[@class='increment']");
-    By addCartBtn = By.xpath("//button[contains(text(),'ADD TO CART')]");
+    private By search = By.xpath("//input[@type='search']");
+    private By topDealsText = By.xpath("//a[@href='#/offers']");
+    private By increBtn = By.xpath("//a[@class='increment']");
+    private By addCartBtn = By.xpath("//button[contains(text(),'ADD TO CART')]");
 
-    public void searchProduct(String name){
+    public void searchProduct(String name) {
         WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(search));
         searchField.clear();
         searchField.sendKeys(name);
@@ -36,20 +36,20 @@ public class LandingPage {
         });
     }
 
-    public String getProductName(){
-        return driver.findElement(By.cssSelector("h4.product-name")).getText();
+    public String getProductName() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h4.product-name"))).getText();
     }
 
-    public void selectTopDeals(){
-        driver.findElement(topDealsText).click();
+    public void selectTopDeals() {
+        wait.until(ExpectedConditions.elementToBeClickable(topDealsText)).click();
     }
 
-    public String getTitleLandingPage(){
+    public String getTitleLandingPage() {
         return driver.getTitle();
     }
 
-    public void addItem(int quantity){
-        for (int i = 1; i < quantity; i++){
+    public void addItem(int quantity) {
+        for (int i = 1; i < quantity; i++) {
             WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(increBtn));
             btn.click();
         }
@@ -59,7 +59,7 @@ public class LandingPage {
         wait.until(ExpectedConditions.elementToBeClickable(addCartBtn));
     }
 
-    public void clickAddToCart(){
+    public void clickAddToCart() {
         driver.findElement(addCartBtn).click();
     }
 

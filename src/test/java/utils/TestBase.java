@@ -11,32 +11,54 @@ import java.time.Duration;
 import java.util.Properties;
 
 public class TestBase {
-    public WebDriver driver;
+    private WebDriver driver;
 
-    public WebDriver WebDriverManager() throws IOException {
-        FileInputStream fis = new FileInputStream("src/test/resources/global.properties");
+    public WebDriver getDriver() {
+        if (driver == null) {
+            driver = initDriver();
+        }
+        return driver;
+    }
+
+    private WebDriver initDriver() {
         Properties prop = new Properties();
-        prop.load(fis);
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream("global.properties")) {
+            if (fis == null) {
+                throw new IllegalStateException("global.properties not found in classpath");
+            }
+            prop.load(fis);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to load global.properties", e);
+        }
+
         String baseUrl = prop.getProperty("linkUrl");
         String browserProps = prop.getProperty("browser");
         String browserMaven = System.getProperty("browser");
+        String browser = (browserMaven != null) ? browserMaven : browserProps;
 
-        String browser = browserMaven != null ? browserMaven : browserProps;
-
-        if (driver == null) {
-            if(browser.equalsIgnoreCase("Chrome")){
-                ChromeOptions options = new ChromeOptions();
-                options.setBrowserVersion("stable");
-                driver = new ChromeDriver(options);
-            } else if (browser.equalsIgnoreCase("Edge")) {
-                WebDriverManager.edgedriver().setup();
-                driver = new EdgeDriver();
-            }
-            assert driver != null;
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-            driver.manage().window().maximize();
-            driver.get(baseUrl);
+        if ("Chrome".equalsIgnoreCase(browser)) {
+            WebDriverManager.chromedriver().setup();
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--start-maximized");
+            options.addArguments("--disable-notifications");
+            driver = new ChromeDriver(options);
+        } else if ("Edge".equalsIgnoreCase(browser)) {
+            WebDriverManager.edgedriver().setup();
+            driver = new EdgeDriver();
+        } else {
+            throw new IllegalStateException("Unsupported browser: " + browser + ". Supported browsers: Chrome, Edge");
         }
+
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+        driver.manage().window().maximize();
+        driver.get(baseUrl);
         return driver;
+    }
+
+    public void quitDriver() {
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
     }
 }

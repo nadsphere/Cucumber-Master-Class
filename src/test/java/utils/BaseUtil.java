@@ -1,17 +1,37 @@
 package utils;
 
 import pages.PageObjectManager;
-import java.io.IOException;
 
 public class BaseUtil {
-    public String landingProductName;
-    public PageObjectManager pom;
-    public TestBase tb;
-    public GenericUtil gu;
+    private String landingProductName;
+    private PageObjectManager pom;
+    private TestBase tb;
+    private GenericUtil gu;
 
-    public BaseUtil() throws IOException {
+    public BaseUtil() {
         tb = new TestBase();
-        pom = new PageObjectManager(tb.WebDriverManager());
-        gu = new GenericUtil(tb.WebDriverManager());
+        var driver = tb.getDriver();
+        pom = new PageObjectManager(driver);
+        gu = new GenericUtil(driver);
+    }
+
+    public String getLandingProductName() {
+        return landingProductName;
+    }
+
+    public void setLandingProductName(String landingProductName) {
+        this.landingProductName = landingProductName;
+    }
+
+    public PageObjectManager getPom() {
+        return pom;
+    }
+
+    public TestBase getTb() {
+        return tb;
+    }
+
+    public GenericUtil getGu() {
+        return gu;
     }
 }

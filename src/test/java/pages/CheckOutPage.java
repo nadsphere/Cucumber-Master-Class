@@ -25,7 +25,6 @@ public class CheckOutPage {
     By prodName = By.xpath("//p[@class='product-name']");
 
     public void checkOutItem() throws Exception{
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(cartIcon));
         jsClick(cartIcon);
 

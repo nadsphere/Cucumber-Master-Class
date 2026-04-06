@@ -27,7 +27,7 @@ public class LandingPageStepDef {
         base.landingProductName = lp.getProductName().split(" -")[0].trim();
     }
 
-    @And("added {string} items of the selected product to the cart")
+    @When("added {string} items of the selected product to the cart")
     public void addedItemsOfTheSelectedProductToTheCart(String quantity) throws Exception{
         lp.addItem(Integer.parseInt(quantity));
         lp.waitForAddToCartClickable();

@@ -22,7 +22,7 @@ public class OfferPageStepDef {
         base.gu.switchWindowToChild();
     }
 
-    @And("validate product name in Offers Page matches with Landing Page")
+    @Then("Validate product name in Offers Page matches with Landing Page")
     public void validateProductNameInOffersPageMatchesWithLandingPage() throws Exception{
         Assert.assertEquals(offerProductName, base.landingProductName);
     }

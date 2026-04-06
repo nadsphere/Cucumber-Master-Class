@@ -8,5 +8,7 @@ Feature: Checkout feature
     Then verify user has ability to enter promo code and place the order
 
     Examples:
-      | name |
+      | name    |
       | Brocolli |
+      | Mango   |
+      | Corn    |

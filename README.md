@@ -13,11 +13,11 @@ This project demonstrates industry-standard test automation practices using the 
 | Language | Java 17 |
 | Build Tool | Apache Maven |
 | BDD Framework | Cucumber 7 (Gherkin) |
-| Browser Automation | Selenium WebDriver 4.20 |
+| Browser Automation | Selenium WebDriver 4.41 |
 | Test Runner | TestNG |
 | Dependency Injection | Picocontainer |
 | Reporting | ExtentReports 5 + Cucumber7 Adapter |
-| Driver Management | WebDriverManager |
+| Driver Management | WebDriverManager 6 |
 
 ## Architecture
 
@@ -32,8 +32,10 @@ src/test/
 │   │   ├── CheckOutPage.java
 │   │   └── PageObjectManager.java
 │   ├── runner/          # TestNG + Cucumber runners
-│   │   ├── TestNGRunner.java
-│   │   └── FailedTestRunner.java
+│   │   ├── TestNGRunner.java         # All tests
+│   │   ├── CheckoutRunner.java       # Checkout feature only
+│   │   ├── SearchProductRunner.java  # SearchProduct feature only
+│   │   └── FailedTestRunner.java     # Rerun failed tests
 │   ├── stepDefinition/  # Gherkin step implementations
 │   │   ├── LandingPageStepDef.java
 │   │   ├── OfferPageStepDef.java
@@ -53,8 +55,9 @@ src/test/
 
 - **Page Object Model (POM)** — Encapsulates page locators and actions in dedicated classes, reducing duplication and improving maintainability.
 - **Dependency Injection (Picocontainer)** — Shares state (`BaseUtil`) across step definitions per scenario without tight coupling.
-- **Singleton WebDriver** — One browser session per scenario, managed by `TestBase`.
+- **Lazy Initialization** — `PageObjectManager` creates page objects on first access, reusing the same instance for the lifetime of a scenario.
 - **Failed Test Rerun** — `FailedTestRunner` re-executes only previously failed scenarios using Cucumber's `rerun` plugin.
+- **Explicit Wait Strategy** — All synchronization uses `WebDriverWait` with `ExpectedConditions`; no hardcoded `Thread.sleep`.
 
 ## Features
 
@@ -65,16 +68,27 @@ src/test/
 - JSON + HTML Cucumber reports for CI/CD integration
 - Cross-browser support (Chrome, Edge) via Maven CLI argument
 - Configurable via `global.properties` — no code changes needed to switch browsers
+- Browser lifecycle managed via `@Before`/`@After` Cucumber hooks
 
 ## Test Scenarios
 
 ### `@CheckOut` — End-to-End Checkout Flow
 Searches for a product, adds multiple items to the cart, proceeds to checkout, validates the product name, and verifies promo code and place order UI elements are present.
 
-### `@SearchProduct` — Cross-Page Search Validation *(demo site limitation)*
-Searches for a product on the landing page, navigates to the offers page (new browser window), searches again, and validates the product name matches across both pages.
+| Example | Product |
+|---|---|
+| Brocolli | Brocolli |
+| Mango | Mango |
+| Corn | Corn |
 
-> **Note:** The GreenKart demo site (`rahulshettyacademy.com`) no longer supports partial product search reliably. The `@SearchProduct` scenarios may fail due to changes in the demo site's data. The `@CheckOut` feature is fully functional.
+### `@SearchProduct` — Cross-Page Search Validation
+Searches for a product on the landing page, navigates to the offers page, searches again, and validates the product name matches across both pages.
+
+| Example | Product |
+|---|---|
+| Ban | Banana |
+| Car | Carrot |
+| Tom | Tomato |
 
 ## Getting Started
 
@@ -88,19 +102,38 @@ Searches for a product on the landing page, navigates to the offers page (new br
 mvn clean test -Dbrowser=Chrome
 ```
 
-### Run Specific Tag
+### Run by Feature (Dedicated Runner)
+```bash
+# Run only Checkout feature
+mvn test -Dtest=CheckoutRunner -Dbrowser=Chrome
+
+# Run only SearchProduct feature
+mvn test -Dtest=SearchProductRunner -Dbrowser=Chrome
+```
+
+### Run by Tag
 ```bash
 mvn clean test -Dcucumber.filter.tags="@CheckOut" -Dbrowser=Chrome
+mvn clean test -Dcucumber.filter.tags="@SearchProduct" -Dbrowser=Chrome
+```
+
+### Run Failed Tests (from last run)
+```bash
+mvn test -Dtest=FailedTestRunner -Dbrowser=Chrome
 ```
 
 ### Run from IDE
-Execute `TestNGRunner.java` directly as a TestNG test.
+Right-click and run as TestNG on any runner class:
+- `TestNGRunner.java` — all tests
+- `CheckoutRunner.java` — checkout feature only
+- `SearchProductRunner.java` — search feature only
+- `FailedTestRunner.java` — rerun failed tests
 
 ### Reports
 After a test run, reports are generated at:
 - **ExtentReports HTML:** `test-output/SparkReport/`
-- **Cucumber HTML:** `target/cucumber-reports/cucumber-rep.html`
-- **Cucumber JSON:** `target/cucumber-reports/cucumber-rep.json`
+- **Cucumber HTML:** `target/cucumber-reports/`
+- **Cucumber JSON:** `target/cucumber-reports/*.json`
 
 ## License
 

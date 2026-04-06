@@ -3,28 +3,33 @@ package pages;
 import org.openqa.selenium.WebDriver;
 
 public class PageObjectManager {
-    public LandingPage landingPage;
-    public OfferPage offerPage;
-
-    public CheckOutPage checkOutPage;
-    public WebDriver driver;
+    private LandingPage landingPage;
+    private OfferPage offerPage;
+    private CheckOutPage checkOutPage;
+    private final WebDriver driver;
 
     public PageObjectManager(WebDriver driver) {
         this.driver = driver;
     }
 
-    public LandingPage getLandingPage(){
-        landingPage = new LandingPage(driver);
+    public LandingPage getLandingPage() {
+        if (landingPage == null) {
+            landingPage = new LandingPage(driver);
+        }
         return landingPage;
     }
 
-    public OfferPage getOfferPage(){
-        offerPage = new OfferPage(driver);
+    public OfferPage getOfferPage() {
+        if (offerPage == null) {
+            offerPage = new OfferPage(driver);
+        }
         return offerPage;
     }
 
     public CheckOutPage getCheckOutPage() {
-        checkOutPage = new CheckOutPage(driver);
+        if (checkOutPage == null) {
+            checkOutPage = new CheckOutPage(driver);
+        }
         return checkOutPage;
     }
 }
